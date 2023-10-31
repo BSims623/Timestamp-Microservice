@@ -25,18 +25,18 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
-app.get("/api/:id", (req, res) => {
-  console.log(req.params.id)
-  const id = req.params.id;
-  const utc = new Date(id).toUTCString();
-  const unix = new Date(id).getTime();
+app.get("/api/:date?", (req, res) => {
+  const date = req.params.date;
+  const theUtc = new Date(date).toUTCString();
 
-  if (id.match(/^-\d+$|^\d+$/)) {
-    return res.json({ "unix": id, "utc": new Date(Number(req.params.id)).toUTCString() })
-  } else if (utc === "Invalid Date") {
-    return res.json({ "error": utc })
+  if (!date) {
+    return res.json({ "unix": new Date().getTime(), "utc": new Date().toUTCString() })
+  } else if (date.match(/^-\d+$|^\d+$/)) {
+    return res.json({ "unix": Number(date), "utc": new Date(Number(req.params.date)).toUTCString() })
+  } else if (theUtc === "Invalid Date") {
+    return res.json({ "error": theUtc })
   }
-  res.json({ "unix": new Date(id).getTime(), "utc": new Date(id).toUTCString() })
+  res.json({ "unix": new Date(date).getTime(), "utc": new Date(date).toUTCString() })
 })
 
 
